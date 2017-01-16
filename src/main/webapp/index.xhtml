@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+<h:head> Medvede </h:head>
+
+<h:body>
+
+    <ui:composition template="/template/template.xhtml">
+        <ui:define name="content">
+
+            <f:view>
+                <div class="container">
+                    <div class="content">
+                        <div class="main">
+
+                            <h:form>
+                                <f:event listener="#{flowMedvedAction.initConversation}"
+                                         type="preRenderComponent">
+                                </f:event>
+
+                                <f:event listener="#{flowMedvedAction.oznacPrvehoMedvedaAkoAktualny()}"
+                                         type="preRenderComponent">
+                                </f:event>
+
+                                <h:commandButton class="btn" value="Načítaj medvedeeeee">
+                                    <f:actionListener binding="#{medvedAction.nacitajPocetMedvedovDoModelu()}"/>
+                                    <f:actionListener binding="#{medvedAction.nacitajVsetkyMedvedeDoModelu()}"/>
+                                </h:commandButton>
+
+                                <h:commandButton class="btn" value="Vynuluj"
+                                                 action="#{medvedAction.nulovaciGombik}"/>
+
+                                <hr/>
+
+                                <p:dataTable rowKey="#{medved.meno}-#{medved.id}" var="medved"
+                                             value="#{medvedModel.medvede}"
+                                             paginator="false"
+                                             selection="#{flowMedvedModel.aktualnyMedved}"
+                                             emptyMessage="Nie sú načítané žiadne medvede">
+                                    <p:column selectionMode="single">
+
+                                    </p:column>
+                                    <p:column headerText="Id">
+                                        <h:outputText value="#{medved.id}"/>
+                                    </p:column>
+
+                                    <p:column headerText="Meno">
+                                        <h:outputText value="#{medved.meno}"/>
+                                    </p:column>
+                                </p:dataTable>
+                                <hr/>
+                                <h:outputText value="Počet všetkých medveďov : #{medvedModel.pocetMedvedov}"/>
+                                <hr/>
+                                <h:commandButton class="btn" value="Zobraz detail vybraného medveďa"
+                                                 action="#{medvedAction.zobrazDetail}"
+                                                 rendered="#{flowMedvedAction.jeNejakyMedvedOznacenyAkoAktualny()}"/>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </f:view>
+
+        </ui:define>
+    </ui:composition>
+
+</h:body>
+
+</html>
